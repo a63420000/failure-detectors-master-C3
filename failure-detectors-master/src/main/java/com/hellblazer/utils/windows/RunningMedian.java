@@ -46,4 +46,10 @@ public class RunningMedian extends Window implements SampledWindow {
         }
         return sorted.get(sorted.size() / 2);
     }
+
+	@Override
+	public double getWindowElement(int i) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

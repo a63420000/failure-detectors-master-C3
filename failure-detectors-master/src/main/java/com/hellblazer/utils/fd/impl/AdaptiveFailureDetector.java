@@ -22,7 +22,7 @@ import com.hellblazer.utils.windows.MultiWindow;
  * "A New Adaptive Accrual Failure Detector for Dependable Distributed Systems"
  * by Benjamin Satzger, Andreas Pietzowski, Wolfgang Trumler, Theo Ungerer
  * 
- * @author <a href="mailto:hal.hildebrand@gmail.com">Hal Hildebrand</a>
+ * @author <a href="mailto:hal.hildebrand@gmail.com">Hal Hildebrand/a>
  * 
  */
 public class AdaptiveFailureDetector extends MultiWindow implements
@@ -50,6 +50,9 @@ public class AdaptiveFailureDetector extends MultiWindow implements
      * @param minimumInterval
      *            - the minimum inter arival interval
      */
+    
+   
+    
     public AdaptiveFailureDetector(double convictionThreshold, int windowSize,
                                    double scale, long expectedSampleInterval,
                                    int initialSamples, double minimumInterval) {
@@ -75,16 +78,19 @@ public class AdaptiveFailureDetector extends MultiWindow implements
     public synchronized void record(long timeStamp, long delay) {
         if (last >= 0.0) {
             double sample = timeStamp - last;
-          //  if (sample > minInterval) {
+           // if (sample > minInterval) {
                 sumOfDelays += delay;
                 if (count == samples.length) {
                     double[] removed = removeFirst();
                     sumOfDelays -= removed[1];
                 }
                 addLast(sample, delay);
+           // }
+          //  else
+           // {
+           // 	FdMain.mloss++;
+           // 	return;
           //  }
-	  //  else
-	   // 	return;
         }
         double averageDelay = count == 0 ? 0.0 : sumOfDelays / count;
         last = timeStamp + averageDelay;
@@ -123,4 +129,40 @@ public class AdaptiveFailureDetector extends MultiWindow implements
         }
         return deltaCount;
     }
+
+	@Override
+	
+	public double getAverageInterArrivalTime(){
+    	
+		double noTest=0;
+    	return noTest;
+    	
+    }
+	
+	
+
+	@Override
+	public double[] getInterArrivalTime() {
+		// TODO Auto-generated method stub
+		double[] arr= new double[1000];
+		return arr;
+	}
+
+	@Override
+	public void setExpectedInterArrivalTime(double expected) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getExpectedInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean shouldConvictByDesign(long now) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

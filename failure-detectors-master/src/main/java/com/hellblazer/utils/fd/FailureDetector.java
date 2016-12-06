@@ -43,4 +43,14 @@ public interface FailureDetector {
      */
     boolean shouldConvict(long now);
 
+	void setExpectedInterArrivalTime(double expected);
+
+	boolean shouldConvictByDesign(long now);
+
+	double[] getInterArrivalTime();
+
+	double getAverageInterArrivalTime();
+
+	double getExpectedInterArrivalTime();
+
 }

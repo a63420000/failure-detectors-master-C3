@@ -16,7 +16,7 @@ package com.hellblazer.utils.fd.impl;
 
 import com.hellblazer.utils.fd.FailureDetector;
 import com.hellblazer.utils.fd.FailureDetectorFactory;
-
+import java.util.Arrays;
 /**
  * 
  * @author <a href="mailto:hal.hildebrand@gmail.com">Hal Hildebrand</a>

@@ -20,7 +20,7 @@ import com.hellblazer.utils.fd.FailureDetector;
 import com.hellblazer.utils.windows.RunningAverage;
 import com.hellblazer.utils.windows.RunningMedian;
 import com.hellblazer.utils.windows.SampledWindow;
-
+import java.util.Arrays; //sort a array from small to big
 /**
  * Instead of providing information of a boolean nature (trust vs. suspect),
  * this failure detector outputs a suspicion level on a continuous scale. The
@@ -45,36 +45,89 @@ public class PhiAccrualFailureDetector implements FailureDetector {
     private final double        threshold;
     private SampledWindow       window;
 
+    public double Expected;
+    
     public PhiAccrualFailureDetector(double convictThreshold,
                                      boolean useMedian, int windowSize,
                                      long expectedSampleInterval,
                                      int initialSamples, double minimumInterval) {
-        threshold = convictThreshold;
+        threshold = convictThreshold;//Big phi
         minInterval = minimumInterval;
+        
         if (useMedian) {
             window = new RunningMedian(windowSize);
         } else {
             window = new RunningAverage(windowSize);
         }
+        
+        double temp=expectedSampleInterval;
+        setExpectedInterArrivalTime(temp);
+        
         long now = System.currentTimeMillis();
         last = now - initialSamples * expectedSampleInterval;
         for (int i = 0; i < initialSamples; i++) {
             record((long) (last + expectedSampleInterval), 0L);
         }
+        
         assert last == now;
+        
     }
 
     /* (non-Javadoc)
      * @see com.hellblazer.jackal.gossip.FailureDetector#record(long)
      */
     @Override
+    
+    //modified place
+    public void setExpectedInterArrivalTime(double expected){
+    	Expected=expected;
+    }
+    
+    public double getExpectedInterArrivalTime(){
+    	return Expected;
+    }
+    
+    public double getAverageInterArrivalTime(){
+    	
+    	double sum =0;
+    	
+    	int i;
+    	
+    	for(i=0;i<window.size();i++){
+    		
+    		sum+=window.getWindowElement(i);
+    		
+    	}
+    	
+    	return sum/1000;
+    	
+    }
+    
+    public double[] getInterArrivalTime(){
+    	
+    	double[] arr = new double[1000];
+    	
+    	int i;
+    	
+    	for(i=0;i<window.size();i++){
+    		arr[i]=window.getWindowElement(i);
+    	}
+    	
+    	Arrays.sort(arr);
+    	
+    	return arr;
+    }
+    //
     public void record(long now, long delay) {
+    	
         final ReentrantLock myLock = stateLock;
+        
         try {
             myLock.lockInterruptibly();
         } catch (InterruptedException e) {
             return;
         }
+        
         try {
             double interArrivalTime = now - last;
             if (interArrivalTime < minInterval) {
@@ -85,6 +138,7 @@ public class PhiAccrualFailureDetector implements FailureDetector {
         } finally {
             myLock.unlock();
         }
+        
     }
 
     /**
@@ -103,6 +157,49 @@ public class PhiAccrualFailureDetector implements FailureDetector {
      * @see com.hellblazer.utils.fd.FailureDetector#shouldConvict(long)
      */
     @Override
+    
+    public boolean shouldConvictByDesign(long now){
+    	
+    	final ReentrantLock myLock = stateLock;
+        try {
+            myLock.lockInterruptibly();
+        } catch (InterruptedException e) {
+            return false;
+        }
+        try {
+            if (window.size() == 0) {
+                return false;
+            }
+            double delta = now - last;
+            
+            double average;
+            double[] temparr = new double[1000];
+            double timeout;
+            
+            double expectedInterArrivalTime = getExpectedInterArrivalTime();
+            
+            temparr = getInterArrivalTime();
+            average = getAverageInterArrivalTime();
+            
+            timeout = average + temparr[999] - expectedInterArrivalTime;
+            
+            boolean shouldConvict = delta > timeout;
+            /*
+            if (shouldConvict) {
+                System.out.println("delta: " + delta);
+            }
+            */
+            return shouldConvict;
+        } finally {
+            myLock.unlock();
+        }
+    	
+    	
+    	
+    	
+    }
+    
+    
     public boolean shouldConvict(long now) {
         final ReentrantLock myLock = stateLock;
         try {
@@ -129,4 +226,9 @@ public class PhiAccrualFailureDetector implements FailureDetector {
             myLock.unlock();
         }
     }
+
+	
+
+
+	
 }

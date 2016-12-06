@@ -39,4 +39,7 @@ public class RunningAverage extends Window implements SampledWindow {
         }
         return sum / count;
     }
+
+	
+
 }

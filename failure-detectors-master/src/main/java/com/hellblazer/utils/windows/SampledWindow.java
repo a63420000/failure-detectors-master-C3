@@ -20,4 +20,6 @@ public interface SampledWindow {
     int size();
 
     double value();
+
+	double getWindowElement(int i);
 }

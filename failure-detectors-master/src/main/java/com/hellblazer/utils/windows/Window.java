@@ -71,4 +71,8 @@ public class Window {
         buf.append("]");
         return buf.toString();
     }
+    
+    public double getWindowElement(int i){
+    	return samples[i];
+    }
 }

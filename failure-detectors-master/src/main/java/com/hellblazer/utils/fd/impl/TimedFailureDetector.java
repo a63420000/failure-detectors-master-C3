@@ -41,5 +41,37 @@ public class TimedFailureDetector implements FailureDetector {
         }
         return now - last > maxInterval;
     }
+    
 
+	@Override
+	public double[] getInterArrivalTime() {
+		// TODO Auto-generated method stub
+		double[] arr = new double[1000];
+		
+		return arr;
+	}
+
+	@Override
+	public double getAverageInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setExpectedInterArrivalTime(double expected) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getExpectedInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean shouldConvictByDesign(long now) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
