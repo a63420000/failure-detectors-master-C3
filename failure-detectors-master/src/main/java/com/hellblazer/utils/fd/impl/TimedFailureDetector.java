@@ -74,4 +74,16 @@ public class TimedFailureDetector implements FailureDetector {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public double getTimeout() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void recordTimeout(double Timeout) {
+		// TODO Auto-generated method stub
+		
+	}
 }

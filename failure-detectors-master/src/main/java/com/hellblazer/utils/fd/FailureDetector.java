@@ -53,4 +53,8 @@ public interface FailureDetector {
 
 	double getExpectedInterArrivalTime();
 
+	double getTimeout();
+	
+	void recordTimeout(double Timeout);
+	
 }

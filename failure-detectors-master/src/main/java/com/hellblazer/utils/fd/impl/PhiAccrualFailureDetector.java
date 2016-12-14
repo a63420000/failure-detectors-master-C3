@@ -46,7 +46,7 @@ public class PhiAccrualFailureDetector implements FailureDetector {
     private SampledWindow       window;
 
     public double Expected;
-    
+    public double timeout;
     public PhiAccrualFailureDetector(double convictThreshold,
                                      boolean useMedian, int windowSize,
                                      long expectedSampleInterval,
@@ -101,6 +101,14 @@ public class PhiAccrualFailureDetector implements FailureDetector {
     	
     	return sum/1000;
     	
+    }
+    
+    public void recordTimeout(double Timeout){
+    	timeout=Timeout;
+    }
+    
+    public double getTimeout(){
+    	return timeout;
     }
     
     public double[] getInterArrivalTime(){
@@ -182,7 +190,7 @@ public class PhiAccrualFailureDetector implements FailureDetector {
             average = getAverageInterArrivalTime();
             
             timeout = average + temparr[999] - expectedInterArrivalTime;
-            
+            recordTimeout(timeout);
             boolean shouldConvict = delta > timeout;
             /*
             if (shouldConvict) {

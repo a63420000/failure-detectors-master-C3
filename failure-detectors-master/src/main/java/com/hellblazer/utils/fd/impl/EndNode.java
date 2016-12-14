@@ -20,7 +20,11 @@ public class EndNode extends Thread {
 
 	int port;
 	InetAddress server;
+	
 	FailureDetectorFactory adapFDfac;
+	FailureDetectorFactory PhiFDfac;//Phi for SDN
+
+	
 	public static Map<Integer, Integer> gossipList = new ConcurrentHashMap<Integer, Integer>();
 	public static Map<Integer, FailureDetector> FDList = new ConcurrentHashMap<Integer, FailureDetector>();
 	public static Integer[][] suspectMtx = new Integer[4][4];
@@ -38,12 +42,17 @@ public class EndNode extends Thread {
 	
 	public EndNode(String pServer, int pPort) {
 		try {
+			
 			port = pPort;
 			server = InetAddress.getByName(pServer);
-			adapFDfac = new AdaptiveFailureDetectorFactory(0.9, 1000, 1.0,
-					20000, 100, 1000);
-			FailureDetector adapFD = adapFDfac.create();
-			FDList.put(port, adapFD);
+			//adapFDfac = new AdaptiveFailureDetectorFactory(0.9, 1000, 1.0,20000, 100, 1000);
+			PhiFDfac = new PhiFailureDetectorFactory(1, 1000, 500, 1000, 500, false);
+			
+			//FailureDetector adapFD = adapFDfac.create();
+			
+			FailureDetector PhiFD = PhiFDfac.create();
+			
+			FDList.put(port, PhiFD);
 
 			aliveList.add(port);
 
@@ -120,11 +129,16 @@ public class EndNode extends Thread {
 
 			long now = System.currentTimeMillis();
 			for (int i = 0; i < 4; i++) {
-				FailureDetector adapFD = FDList.get(5554 + i);
-				if (adapFD != null) {
-					if (!adapFD.shouldConvict(now)) {
+				
+				FailureDetector PhiFD = FDList.get(5554 + i);
+				
+				if (PhiFD != null) {
+					if (!PhiFD.shouldConvictByDesign(now)) {
 						fcflag[i] = 0;
 						System.out.println("5554+" + i + "-Alive-");
+						
+						System.out.println("Timeout : "+PhiFD.getTimeout()+"ms");
+						
 						if (suspectMtx[2][i] == 1 || suspectMtx[2][i] == -1)
 							suspectMtx[2][i] = -1;
 						else

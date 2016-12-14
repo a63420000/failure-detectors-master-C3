@@ -20,10 +20,11 @@ import java.util.Set;
 
 public class FdMain {
 
-	public static EndNode node1 = new EndNode("192.168.10.137", 5554);
-	public static EndNode node2 = new EndNode("192.168.10.138", 5555);
-	public static EndNode node3 = new EndNode("192.168.10.139", 5556);
-	public static EndNode node4 = new EndNode("192.168.10.140", 5557);
+	public static EndNode node1 = new EndNode("192.168.10.142", 5554);//fd1
+	public static EndNode node2 = new EndNode("192.168.10.138", 5555);//fd2
+	public static EndNode node3 = new EndNode("192.168.10.139", 5556);//fd3
+	public static EndNode node4 = new EndNode("192.168.10.140", 5557);//fd4
+	
 	public static Map<Integer,EndNode> EndnodeList = new ConcurrentHashMap<Integer,EndNode>();
 	public static Map<Integer,Integer> SendportList = new ConcurrentHashMap<Integer,Integer>();
         public static DatagramChannel channel;
@@ -124,17 +125,19 @@ public class FdMain {
 					Thread.sleep(100);
 					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
 					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
-					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
-					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
-					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
-					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
-					Thread.sleep(100);
 					
+					/*
+					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
+					Thread.sleep(100);
+					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
+					Thread.sleep(100);
+					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
+					Thread.sleep(100);
+					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
+					Thread.sleep(100);
+					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run(tempResult);
+					Thread.sleep(100);
+					*/
 /*
 				}
 				else
