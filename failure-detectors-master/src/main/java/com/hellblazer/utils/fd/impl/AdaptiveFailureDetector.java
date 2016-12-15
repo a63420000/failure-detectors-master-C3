@@ -16,7 +16,11 @@ package com.hellblazer.utils.fd.impl;
 
 import com.hellblazer.utils.fd.FailureDetector;
 import com.hellblazer.utils.windows.MultiWindow;
+import com.hellblazer.utils.windows.RunningAverage;
+import com.hellblazer.utils.windows.SampledWindow;
+import com.hellblazer.utils.windows.Window;
 
+import java.util.Arrays;
 /**
  * An adaptive accural failure detector based on the paper:
  * "A New Adaptive Accrual Failure Detector for Dependable Distributed Systems"
@@ -33,7 +37,7 @@ public class AdaptiveFailureDetector extends MultiWindow implements
     private final double scale;
     private final double threshold;
     private double       sumOfDelays = 0.0;
-
+    private SampledWindow       window;
     /**
      * 
      * @param convictionThreshold
@@ -66,6 +70,8 @@ public class AdaptiveFailureDetector extends MultiWindow implements
         minInterval = minimumInterval;
         this.scale = scale;
 
+        window = new RunningAverage(windowSize);
+        
         long now = System.currentTimeMillis();
         last = now - initialSamples * expectedSampleInterval;
         for (int i = 0; i < initialSamples; i++) {
@@ -85,6 +91,7 @@ public class AdaptiveFailureDetector extends MultiWindow implements
                     sumOfDelays -= removed[1];
                 }
                 addLast(sample, delay);
+                window.sample(sample);
            // }
           //  else
            // {
@@ -142,11 +149,19 @@ public class AdaptiveFailureDetector extends MultiWindow implements
 	
 
 	@Override
-	public double[] getInterArrivalTime() {
-		// TODO Auto-generated method stub
-		double[] arr= new double[1000];
-		return arr;
-	}
+	public double[] getInterArrivalTime(){
+    	
+    	double[] arr = new double[1000];
+    	int i;
+    	
+    	for(i=0;i<1000;i++){
+    		arr[i]=window.getWindowElement(i);
+    	}
+    	
+    	Arrays.sort(arr);
+    	
+    	return arr;
+    }
 
 	@Override
 	public void setExpectedInterArrivalTime(double expected) {

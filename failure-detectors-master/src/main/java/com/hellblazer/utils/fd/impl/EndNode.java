@@ -40,19 +40,21 @@ public class EndNode extends Thread {
 	public String strtemp= new String();
 	private Socket m_socket;//connect to python
 	
+	public double[] temp= new double[1000];
+	
 	public EndNode(String pServer, int pPort) {
 		try {
 			
 			port = pPort;
 			server = InetAddress.getByName(pServer);
-			//adapFDfac = new AdaptiveFailureDetectorFactory(0.9, 1000, 1.0,20000, 100, 1000);
+			adapFDfac = new AdaptiveFailureDetectorFactory(0.9, 1000, 1.0, 500, 1000, 500);
 			PhiFDfac = new PhiFailureDetectorFactory(1, 1000, 500, 1000, 500, false);
 			
-			//FailureDetector adapFD = adapFDfac.create();
+			FailureDetector adapFD = adapFDfac.create();
 			
 			FailureDetector PhiFD = PhiFDfac.create();
 			
-			FDList.put(port, PhiFD);
+			FDList.put(port, adapFD);
 
 			aliveList.add(port);
 
@@ -130,14 +132,16 @@ public class EndNode extends Thread {
 			long now = System.currentTimeMillis();
 			for (int i = 0; i < 4; i++) {
 				
-				FailureDetector PhiFD = FDList.get(5554 + i);
+				FailureDetector adapFD = FDList.get(5554 + i);
 				
-				if (PhiFD != null) {
-					if (!PhiFD.shouldConvictByDesign(now)) {
+				if (adapFD != null) {
+					if (!adapFD.shouldConvictByDesign(now)) {
 						fcflag[i] = 0;
 						System.out.println("5554+" + i + "-Alive-");
-						
-						System.out.println("Timeout : "+PhiFD.getTimeout()+"ms");
+						temp=adapFD.getInterArrivalTime();
+						System.out.println("temp[999]"+temp[999]);
+						temp=null;
+					//	System.out.println("Timeout : "+PhiFD.getTimeout()+"ms");
 						
 						if (suspectMtx[2][i] == 1 || suspectMtx[2][i] == -1)
 							suspectMtx[2][i] = -1;
