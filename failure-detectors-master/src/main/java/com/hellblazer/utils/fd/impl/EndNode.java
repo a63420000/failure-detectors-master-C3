@@ -31,7 +31,7 @@ public class EndNode extends Thread{
 		try {
 			port = pPort;
 			server = InetAddress.getByName(pServer);
-			adapFDfac = new AdaptiveFailureDetectorFactory(0.3, 1000, 1.0, 20000, 100, 500);
+			adapFDfac = new AdaptiveFailureDetectorFactory(0.9, 1000, 1.0, 500, 1000, 500);
 			FailureDetector adapFD = adapFDfac.create();
 			FDList.put(port, adapFD);
 
@@ -112,9 +112,12 @@ public class EndNode extends Thread{
 				FailureDetector adapFD = FDList.get(5554+i);
 				if(adapFD != null)
 				{
-					if(!adapFD.shouldConvict(now)) {
+					if(! adapFD.shouldConvictPhi(now,1) ) {
 						fcflag[i] = 0;
 						System.out.println("5554+"+i+"-Alive-");
+						System.out.println("delta   : "+adapFD.getDelta()+"ms"+" temp[999] :"+adapFD.getMaxarr());
+						System.out.println("average : "+adapFD.getAverage()+"ms Timeout :"+adapFD.getTimeout());
+						
 						if(suspectMtx[2][i] == 1 || suspectMtx[2][i] == -1)
 							suspectMtx[2][i] = -1;
 						else

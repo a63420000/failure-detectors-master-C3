@@ -102,6 +102,9 @@ public class PhiAccrualFailureDetector implements FailureDetector {
      * 
      * @see com.hellblazer.utils.fd.FailureDetector#shouldConvict(long)
      */
+    
+    
+    
     @Override
     public boolean shouldConvict(long now) {
         final ReentrantLock myLock = stateLock;
@@ -129,4 +132,82 @@ public class PhiAccrualFailureDetector implements FailureDetector {
             myLock.unlock();
         }
     }
+
+	@Override
+	public boolean shouldConvictByDesign(long now) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setExpectedInterArrivalTime(double expected) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void recordTimeout(double Timeout) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void recordDelta(double delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getInterArrivalTime(double[] temp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getAverageInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getExpectedInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double[] getInterArrivalTime() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getDelta() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMaxarr() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getTimeout() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAverage() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean shouldConvictPhi(long now, int BigPhi) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

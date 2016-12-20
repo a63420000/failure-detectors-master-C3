@@ -10,10 +10,10 @@ import java.io.*;
 
 public class FdMain {
 
-	public static EndNode node1 = new EndNode("192.168.199.135", 5554);
-	public static EndNode node2 = new EndNode("192.168.199.139", 5555);
-	public static EndNode node3 = new EndNode("192.168.199.141", 5556);
-	public static EndNode node4 = new EndNode("192.168.199.142", 5557);
+	public static EndNode node1 = new EndNode("192.168.10.142", 5554);
+	public static EndNode node2 = new EndNode("192.168.10.138", 5555);
+	public static EndNode node3 = new EndNode("192.168.10.139", 5556);
+	public static EndNode node4 = new EndNode("192.168.10.140", 5557);
 	public static Map<Integer,EndNode> EndnodeList = new ConcurrentHashMap<Integer,EndNode>();
 	public static Map<Integer,Integer> SendportList = new ConcurrentHashMap<Integer,Integer>();
         public static DatagramChannel channel;
@@ -99,11 +99,11 @@ public class FdMain {
 					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556)+2)%EndNode.aliveList.size())).run();
 					Thread.sleep(100);
 					sdflag = 1;
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run();
+					//EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run();
 					Thread.sleep(100);
 					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run();
 					Thread.sleep(100);
-					EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run();
+					//EndnodeList.get(EndNode.aliveList.get((EndNode.aliveList.indexOf(5556))%EndNode.aliveList.size())).run();
 					Thread.sleep(100);
 /*
 				}

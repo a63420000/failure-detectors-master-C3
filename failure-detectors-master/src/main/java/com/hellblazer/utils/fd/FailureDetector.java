@@ -42,5 +42,21 @@ public interface FailureDetector {
      * @return - true if the conviction threshold has been exceeded.
      */
     boolean shouldConvict(long now);
+    boolean shouldConvictByDesign(long now);
+    boolean shouldConvictPhi(long now,int BigPhi);
+    
+
+	void setExpectedInterArrivalTime(double expected);
+	void recordTimeout(double Timeout);
+	void recordDelta(double delta);
+	
+	void getInterArrivalTime(double[] temp);//arr is array
+	double getAverageInterArrivalTime();
+	double getExpectedInterArrivalTime();
+	double[] getInterArrivalTime();
+	double getDelta();
+	double getMaxarr();
+	double getTimeout();
+	double getAverage();
 
 }
